@@ -1,0 +1,576 @@
+:root {
+  --bg: #edf3f1;
+  --card: #ffffff;
+  --text: #1b2a2f;
+  --muted: #5f6f74;
+  --accent: #0f766e;
+  --accent-2: #065f46;
+  --danger: #b91c1c;
+  --border: #d7e1e4;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 90% 10%, #d7efe7 0, transparent 30%),
+    radial-gradient(circle at 10% 90%, #d5e7ef 0, transparent 25%),
+    linear-gradient(135deg, #edf3f1, #f9fbfd);
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.app-page {
+  background: #ffffff;
+}
+
+.landing-bg {
+  min-height: 100vh;
+  position: relative;
+  background-image: url('homepage2-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.landing-cta-group {
+  position: absolute;
+  left: 5.3%;
+  top: 60.2%;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  z-index: 10;
+}
+
+.landing-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 168px;
+  height: 54px;
+  padding: 0 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.landing-cta-primary {
+  color: #ffffff;
+  background: linear-gradient(180deg, #3e9dff 0%, #1c69e8 100%);
+  box-shadow: 0 10px 22px rgba(28, 105, 232, 0.30);
+}
+
+.landing-cta-secondary {
+  color: #ffffff;
+  background: linear-gradient(180deg, #ffab47 0%, #f48a1d 100%);
+  box-shadow: 0 10px 22px rgba(244, 138, 29, 0.30);
+}
+
+.landing-cta:hover {
+  filter: brightness(1.04);
+  transform: translateY(-2px);
+}
+
+.landing-auth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+
+.landing-auth-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 17, 44, 0.52);
+  backdrop-filter: blur(4px);
+}
+
+.landing-auth-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(520px, calc(100% - 28px));
+  max-height: calc(100vh - 40px);
+  transform: translate(-50%, -50%);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(8, 17, 44, 0.35);
+  background: #ffffff;
+}
+
+.landing-auth-frame {
+  width: 100%;
+  height: 560px;
+  border: 0;
+  display: block;
+  background: transparent;
+}
+
+.landing-auth-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  font-size: 24px;
+  line-height: 1;
+  z-index: 2;
+}
+
+.landing-auth-close:hover {
+  background: rgba(15, 23, 42, 0.14);
+}
+
+.landing-hero { display: none; }
+
+.container {
+  max-width: 1220px;
+  margin: 24px auto;
+  padding: 24px;
+}
+
+.app-shell {
+  background: linear-gradient(180deg, #ffffff, #f9fcfd);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(16, 36, 45, 0.08);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pill {
+  background: #e6f4f1;
+  color: #0a5f57;
+  border: 1px solid #b8e3db;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-link {
+  text-decoration: none;
+  background: #0f766e;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.active-tab {
+  background: #134e4a;
+  box-shadow: inset 0 0 0 1px #99f6e4;
+}
+
+h1 { margin: 0 0 8px; }
+h2 { margin: 0 0 8px; }
+.subtitle { margin: 0 0 8px; color: var(--muted); }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: linear-gradient(180deg, #ffffff, #f8fcfb);
+}
+
+.stat-card h3 {
+  margin: 0 0 8px;
+  color: #155e75;
+  font-size: 14px;
+}
+
+.stat-card p {
+  margin: 0;
+  font-weight: 700;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 14px;
+  background: #fcfefe;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 6px;
+}
+
+input, select, button {
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0 10px;
+  font-size: 14px;
+  background: #fff;
+}
+
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:hover { background: var(--accent-2); }
+
+.result, .error {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.result {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: var(--danger);
+}
+
+.batch-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hint {
+  margin: 8px 0 10px;
+  color: var(--muted);
+}
+
+.hint a {
+  color: #0f766e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hint a:hover {
+  text-decoration: underline;
+}
+
+.cols {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.dashboard-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.dashboard-nav {
+  background: #0f172a;
+  color: #e2f3ef;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.nav-title {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.nav-user {
+  font-size: 12px;
+  color: #c6d9d4;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #e2f3ef;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.nav-link.ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-main {
+  padding: 26px;
+  background: linear-gradient(180deg, #f9fcfd, #eef5f7);
+}
+
+.dashboard-frame {
+  width: 100%;
+  min-height: calc(100vh - 52px);
+  border: 0;
+  border-radius: 18px;
+  background: #f9fcfd;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.05);
+}
+
+.welcome-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.04);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.dash-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 980px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #e6fffa;
+  color: #134e4a;
+  font-size: 13px;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody td {
+  font-size: 13px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #ecf1f4;
+  white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+  background: #fbfefe;
+}
+
+.click-row {
+  cursor: pointer;
+}
+
+.click-row:hover {
+  background: #e8fff9;
+}
+
+.inline-form {
+  margin-top: 12px;
+}
+
+.danger-btn {
+  background: #b91c1c;
+}
+
+.danger-btn:hover {
+  background: #991b1b;
+}
+
+.embed-shell {
+  padding: 24px;
+}
+
+.embed-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.graph-shell {
+  padding: 24px;
+}
+
+.graph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.graph-card {
+  min-height: 360px;
+}
+
+.graph-card canvas {
+  width: 100% !important;
+  height: 280px !important;
+}
+
+.auth-embed-body {
+  margin: 0;
+  background: transparent;
+}
+
+.auth-embed-body .auth-shell {
+  width: 100%;
+  padding: 0;
+}
+
+.auth-card-embed {
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+  padding: 40px 38px 28px;
+}
+
+.login-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-image:
+    linear-gradient(120deg, rgba(8, 25, 31, 0.58), rgba(7, 55, 48, 0.52)),
+    url('https://img.freepik.com/premium-vector/layoff-staff-reduction-dismissal-concept-fired-dismissed-redundant-employees-office-workers-leaving-company-workplace-personnel-redundancy-downsizing-team-cuts-flat-vector-illustration_198278-24042.jpg?w=1060');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.auth-shell {
+  width: min(480px, 100%);
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.96);
+  padding: 30px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 20px 48px rgba(13, 35, 43, 0.30);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form {
+  display: grid;
+  gap: 12px;
+}
+
+.login-form button {
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .auth-shell { width: min(520px, 100%); }
+}
+
+@media (max-width: 700px) {
+  .landing-cta-group {
+    left: 5%;
+    top: 67%;
+    gap: 12px;
+  }
+  .landing-cta {
+    min-width: 118px;
+    height: 42px;
+    padding: 0 18px;
+    font-size: 13px;
+  }
+  .landing-top {
+    flex-direction: column;
+    width: 100%;
+  }
+  .landing-auth-frame {
+    height: 520px;
+  }
+  .landing-top h1 {
+    font-size: 24px;
+  }
+  .landing-actions {
+    justify-content: flex-start;
+  }
+  .topbar {
+    flex-direction: column;
+  }
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Employee Layoff Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{% if embedded %}auth-embed-body{% else %}login-bg{% endif %}">
+  <main class="auth-shell">
+    <section class="auth-card {% if embedded %}auth-card-embed{% endif %}">
+      <h1>Employee Layoff Prediction</h1>
+      <p class="subtitle">Monitor workforce risk trends and evaluate layoff impact proactively.</p>
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in to access your dashboard.</p>
+      <form method="post" class="login-form">
+        {% if embedded %}
+        <input type="hidden" name="embed" value="1">
+        {% endif %}
+        <label>Username
+          <input type="text" name="username" placeholder="Enter username" required>
+        </label>
+        <label>Password
+          <input type="password" name="password" placeholder="Enter password" required>
+        </label>
+        <button type="submit">Login</button>
+      </form>
+      {% if error %}
+      <section class="error">
+        <h2>Login Error</h2>
+        <p>{{ error }}</p>
+      </section>
+      {% endif %}
+      <p class="hint">First time here? <a href="{{ url_for('register') }}">Create an account</a></p>
+    </section>
+  </main>
+</body>
+</html>

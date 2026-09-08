@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Employee Layoff Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="landing-bg">
+  <div class="landing-cta-group">
+    <button class="landing-cta landing-cta-primary" type="button" data-auth-target="{{ url_for('login', embed=1) }}">Login</button>
+    <button class="landing-cta landing-cta-secondary" type="button" data-auth-target="{{ url_for('register', embed=1) }}">Register</button>
+  </div>
+
+  <div class="landing-auth-modal" id="auth-modal" hidden>
+    <div class="landing-auth-backdrop" data-close-auth></div>
+    <div class="landing-auth-panel">
+      <button class="landing-auth-close" type="button" aria-label="Close" data-close-auth>&times;</button>
+      <iframe class="landing-auth-frame" id="auth-frame" title="Authentication"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const authModal = document.getElementById("auth-modal");
+    const authFrame = document.getElementById("auth-frame");
+    const authButtons = document.querySelectorAll("[data-auth-target]");
+    const closeAuthButtons = document.querySelectorAll("[data-close-auth]");
+
+    const resizeAuthFrame = () => {
+      try {
+        const frameDocument = authFrame.contentWindow.document;
+        const bodyHeight = frameDocument.body ? frameDocument.body.scrollHeight : 0;
+        const docHeight = frameDocument.documentElement ? frameDocument.documentElement.scrollHeight : 0;
+        const nextHeight = Math.max(bodyHeight, docHeight, 420);
+        authFrame.style.height = `${Math.min(nextHeight, window.innerHeight - 80)}px`;
+      } catch (error) {
+        authFrame.style.height = "560px";
+      }
+    };
+
+    authButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        authFrame.src = button.dataset.authTarget;
+        authFrame.style.height = "560px";
+        authModal.hidden = false;
+        document.body.classList.add("modal-open");
+      });
+    });
+
+    authFrame.addEventListener("load", resizeAuthFrame);
+    window.addEventListener("resize", resizeAuthFrame);
+
+    closeAuthButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        authModal.hidden = true;
+        authFrame.src = "";
+        document.body.classList.remove("modal-open");
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dataset Record Update</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app-page">
+  <main class="{% if embedded %}embed-shell{% else %}container app-shell{% endif %}">
+    {% if not embedded %}
+    <header class="topbar">
+      <div>
+        <h1>Dataset Record Update</h1>
+        <p class="subtitle">Load an employee record, edit values, and save to dataset.</p>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">User: {{ username }}</span>
+        <a class="btn-link {% if active_page == 'single' %}active-tab{% endif %}" href="{{ url_for('single_evaluation') }}">Single</a>
+        <a class="btn-link {% if active_page == 'batch' %}active-tab{% endif %}" href="{{ url_for('batch_evaluation') }}">Dataset</a>
+        <a class="btn-link {% if active_page == 'records' %}active-tab{% endif %}" href="{{ url_for('records') }}">Records</a>
+        <a class="btn-link" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </header>
+    {% else %}
+    <header class="embed-header">
+      <div>
+        <h1>Dataset Record Update</h1>
+        <p class="subtitle">Load an employee record, edit values, and save to dataset.</p>
+      </div>
+    </header>
+    {% endif %}
+
+    <section class="panel">
+      <h2>Select Dataset</h2>
+      <form method="get" class="batch-form">
+        {% if embedded %}
+        <input type="hidden" name="embed" value="1">
+        {% endif %}
+        <label>Dataset
+          <select name="dataset">
+            {% for ds in datasets %}
+            <option value="{{ ds }}" {% if dataset_key == ds %}selected{% endif %}>{{ ds }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Row Index
+          <input type="number" name="row_index" min="0" value="{{ row_index_query }}" placeholder="Enter row index">
+        </label>
+        <button type="submit">Load Dataset</button>
+      </form>
+      <p class="hint">Loaded dataset: <strong>{{ dataset_key }}</strong> | Total rows: <strong>{{ total_rows }}</strong> | Enter the row index you want to update, then click Load Dataset.</p>
+    </section>
+
+    {% if message %}
+    <section class="result">
+      <h2>Success</h2>
+      <p>{{ message }}</p>
+    </section>
+    {% endif %}
+
+    {% if error %}
+    <section class="error">
+      <h2>Error</h2>
+      <p>{{ error }}</p>
+    </section>
+    {% endif %}
+
+    {% if record %}
+    <section class="panel">
+      <h2>Edit Record</h2>
+      <p class="hint">Editing row index: <strong>{{ record['row_index'] }}</strong></p>
+      <form method="post" class="grid">
+        <input type="hidden" name="action" value="save">
+        <input type="hidden" name="dataset" value="{{ dataset_key }}">
+        <input type="hidden" name="row_index" value="{{ record['row_index'] }}">
+        {% if embedded %}
+        <input type="hidden" name="embed" value="1">
+        {% endif %}
+
+        {% for col, val in record['values'].items() %}
+        <label>{{ col }}
+          {% if col == 'employee_id' %}
+          <input type="text" name="{{ col }}" value="{{ val }}" readonly>
+          {% else %}
+          <input type="text" name="{{ col }}" value="{{ val }}">
+          {% endif %}
+        </label>
+        {% endfor %}
+
+        <button type="submit">Save Changes</button>
+      </form>
+      <form method="post" class="inline-form">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="dataset" value="{{ dataset_key }}">
+        <input type="hidden" name="row_index" value="{{ record['row_index'] }}">
+        {% if embedded %}
+        <input type="hidden" name="embed" value="1">
+        {% endif %}
+        <button type="submit" class="danger-btn" onclick="return confirm('Delete this record?')">Delete Record</button>
+      </form>
+    </section>
+    {% elif not error %}
+    <section class="panel">
+      <h2>Edit Record</h2>
+      <p class="subtitle">No records are available in the selected dataset.</p>
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Single Employee Evaluation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app-page">
+  <main class="{% if embedded %}embed-shell{% else %}container app-shell{% endif %}">
+    {% if not embedded %}
+    <header class="topbar">
+      <div>
+        <h1>Single Employee Evaluation</h1>
+        <p class="subtitle">Evaluate layoff risk for one employee profile.</p>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">User: {{ username }}</span>
+        <a class="btn-link {% if active_page == 'single' %}active-tab{% endif %}" href="{{ url_for('single_evaluation') }}">Single</a>
+        <a class="btn-link {% if active_page == 'batch' %}active-tab{% endif %}" href="{{ url_for('batch_evaluation') }}">Dataset</a>
+        <a class="btn-link {% if active_page == 'records' %}active-tab{% endif %}" href="{{ url_for('records') }}">Records</a>
+        <a class="btn-link" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </header>
+    {% else %}
+    <header class="embed-header">
+      <div>
+        <h1>Single Employee Evaluation</h1>
+        <p class="subtitle">Evaluate layoff risk for one employee profile.</p>
+      </div>
+    </header>
+    {% endif %}
+
+    <section class="stats-grid">
+      <article class="stat-card"><h3>Mode</h3><p>Individual Analysis</p></article>
+      <article class="stat-card"><h3>Features</h3><p>{{ required_features|length }} fields</p></article>
+      <article class="stat-card"><h3>Class Balance</h3><p>0: {{ class_balance.get(0, 0) }} | 1: {{ class_balance.get(1, 0) }}</p></article>
+    </section>
+
+    <section class="panel">
+      <form method="post" class="grid">
+        <label>Age<input type="number" step="1" name="Age" value="{{ form_values['Age'] }}"></label>
+        <label>Distance From Home<input type="number" step="1" name="DistanceFromHome" value="{{ form_values['DistanceFromHome'] }}"></label>
+        <label>Monthly Income<input type="number" step="1" name="monthly_income" value="{{ form_values['monthly_income'] }}"></label>
+        <label>Companies Worked<input type="number" step="1" name="NumCompaniesWorked" value="{{ form_values['NumCompaniesWorked'] }}"></label>
+        <label>Salary Hike %<input type="number" step="1" name="PercentSalaryHike" value="{{ form_values['PercentSalaryHike'] }}"></label>
+        <label>Performance Rating<input type="number" step="1" name="PerformanceRating" value="{{ form_values['PerformanceRating'] }}"></label>
+        <label>Job Satisfaction (1-4)<input type="number" step="1" name="JobSatisfaction" value="{{ form_values['JobSatisfaction'] }}"></label>
+        <label>Years In Current Role<input type="number" step="1" name="YearsInCurrentRole" value="{{ form_values['YearsInCurrentRole'] }}"></label>
+        <label>Years Since Last Promotion<input type="number" step="1" name="YearsSinceLastPromotion" value="{{ form_values['YearsSinceLastPromotion'] }}"></label>
+
+        <label>Business Travel
+          <select name="BusinessTravel">
+            {% for v in choices.get('BusinessTravel', ['Travel_Rarely','Travel_Frequently','Non-Travel']) %}
+            <option value="{{ v }}" {% if form_values['BusinessTravel'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Department
+          <select name="department">
+            {% for v in choices.get('department', ['Research & Development','Sales','Human Resources']) %}
+            <option value="{{ v }}" {% if form_values['department'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Education Field
+          <select name="EducationField">
+            {% for v in choices.get('EducationField', ['Life Sciences','Medical','Marketing','Technical Degree','Other','Human Resources']) %}
+            <option value="{{ v }}" {% if form_values['EducationField'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Gender
+          <select name="Gender">
+            {% for v in choices.get('Gender', ['Male','Female']) %}
+            <option value="{{ v }}" {% if form_values['Gender'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Marital Status
+          <select name="MaritalStatus">
+            {% for v in choices.get('MaritalStatus', ['Single','Married','Divorced']) %}
+            <option value="{{ v }}" {% if form_values['MaritalStatus'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Job Role
+          <select name="job_role">
+            {% for v in choices.get('job_role', ['Research Scientist','Laboratory Technician','Sales Executive']) %}
+            <option value="{{ v }}" {% if form_values['job_role'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Overtime
+          <select name="overtime">
+            {% for v in choices.get('overtime', ['Yes','No']) %}
+            <option value="{{ v }}" {% if form_values['overtime'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>Industry Proxy
+          <select name="industry_proxy">
+            {% for v in choices.get('industry_proxy', ['Technology and Services','Retail and Consumer','Professional Services']) %}
+            <option value="{{ v }}" {% if form_values['industry_proxy'] == v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>National Workers Affected<input type="number" step="1" name="national_workers_affected" value="{{ form_values['national_workers_affected'] }}"></label>
+
+        <button type="submit">Predict Layoff Risk</button>
+      </form>
+    </section>
+
+    {% if prediction %}
+      <section class="result">
+        <h2>{{ prediction }}</h2>
+        <p>Predicted probability: <strong>{{ probability }}%</strong></p>
+      </section>
+    {% endif %}
+
+    {% if error %}
+      <section class="error">
+        <h2>Error</h2>
+        <p>{{ error }}</p>
+      </section>
+    {% endif %}
+  </main>
+</body>
+</html>

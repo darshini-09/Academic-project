@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register | Employee Layoff Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{% if embedded %}auth-embed-body{% else %}login-bg{% endif %}">
+  <main class="auth-shell">
+    <section class="auth-card {% if embedded %}auth-card-embed{% endif %}">
+      <h1>Create Secure Access</h1>
+      <p class="subtitle">Register once to use layoff risk analytics for individual and bulk predictions.</p>
+      <h2>Register</h2>
+      <p class="subtitle">Set your credentials to continue.</p>
+      <form method="post" class="login-form">
+        {% if embedded %}
+        <input type="hidden" name="embed" value="1">
+        {% endif %}
+        <label>Username
+          <input type="text" name="username" placeholder="Choose username" required>
+        </label>
+        <label>Password
+          <input type="password" name="password" placeholder="Choose password" required>
+        </label>
+        <label>Confirm Password
+          <input type="password" name="confirm_password" placeholder="Re-enter password" required>
+        </label>
+        <button type="submit">Register</button>
+      </form>
+      {% if error %}
+      <section class="error">
+        <h2>Registration Error</h2>
+        <p>{{ error }}</p>
+      </section>
+      {% endif %}
+      <p class="hint">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    </section>
+  </main>
+</body>
+</html>

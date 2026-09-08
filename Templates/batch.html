@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dataset Evaluation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app-page">
+  <main class="{% if embedded %}embed-shell{% else %}container app-shell{% endif %}">
+    {% if not embedded %}
+    <header class="topbar">
+      <div>
+        <h1>Entire Dataset Evaluation</h1>
+        <p class="subtitle">Upload a dataset and view all predictions directly in this page.</p>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill">User: {{ username }}</span>
+        <a class="btn-link {% if active_page == 'single' %}active-tab{% endif %}" href="{{ url_for('single_evaluation') }}">Single</a>
+        <a class="btn-link {% if active_page == 'batch' %}active-tab{% endif %}" href="{{ url_for('batch_evaluation') }}">Dataset</a>
+        <a class="btn-link {% if active_page == 'records' %}active-tab{% endif %}" href="{{ url_for('records') }}">Records</a>
+        <a class="btn-link" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </header>
+    {% else %}
+    <header class="embed-header">
+      <div>
+        <h1>Entire Dataset Evaluation</h1>
+        <p class="subtitle">Upload a dataset and view all predictions directly in this page.</p>
+      </div>
+    </header>
+    {% endif %}
+
+    <section class="panel">
+      <h2>Upload Dataset</h2>
+      <form method="post" enctype="multipart/form-data" class="batch-form">
+        {% if embedded %}
+        <input type="hidden" name="embed" value="1">
+        {% endif %}
+        <input type="file" name="dataset_file" accept=".csv,.xlsx,.xls" required>
+        <button type="submit">Run Dataset Prediction</button>
+      </form>
+      <details>
+        <summary>Required columns</summary>
+        <p class="cols">{{ required_features | join(', ') }}</p>
+      </details>
+    </section>
+
+    {% if summary %}
+    <section class="stats-grid">
+      <article class="stat-card"><h3>Total Rows</h3><p>{{ summary.total_rows }}</p></article>
+      <article class="stat-card"><h3>High Risk</h3><p>{{ summary.high_count }}</p></article>
+      <article class="stat-card"><h3>Low Risk</h3><p>{{ summary.low_count }}</p></article>
+      <article class="stat-card"><h3>Average Risk</h3><p>{{ summary.avg_risk }}%</p></article>
+    </section>
+    {% endif %}
+
+    {% if batch_error %}
+      <section class="error">
+        <h2>Batch Error</h2>
+        <p>{{ batch_error }}</p>
+      </section>
+    {% endif %}
+
+    {% if table_rows %}
+    <section class="panel">
+      <h2>Prediction Results (Showing first 200 rows)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              {% for c in table_columns %}
+              <th>{{ c }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in table_rows %}
+            <tr>
+              {% for c in table_columns %}
+              <td>{{ row[c] }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>

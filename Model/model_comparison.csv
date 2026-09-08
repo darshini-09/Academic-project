@@ -1,0 +1,6 @@
+model,accuracy,roc_auc,f1_class1,recall_class1,precision_class1
+RandomForest,0.9457,0.9372,0.5,0.4,0.6667
+GradientBoosting,0.9412,0.9197,0.4348,0.3333,0.625
+ExtraTrees,0.9367,0.9327,0.5333,0.5333,0.5333
+AdaBoost,0.9321,0.9142,0.4,0.3333,0.5
+LogisticRegression,0.8416,0.9243,0.4068,0.8,0.2727

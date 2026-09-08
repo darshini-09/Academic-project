@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HR Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app-page">
+  <div class="dashboard-shell">
+    <aside class="dashboard-nav">
+      <div class="nav-header">
+        <span class="nav-title">HR Dashboard</span>
+        <span class="nav-user">{{ username }}</span>
+      </div>
+      <a class="nav-link {% if active_page == 'single' %}active-tab{% endif %}" data-tab="single" href="{{ url_for('single_evaluation', embed=1) }}" target="dashboard-content">Single Evaluation</a>
+      <a class="nav-link {% if active_page == 'batch' %}active-tab{% endif %}" data-tab="batch" href="{{ url_for('batch_evaluation', embed=1) }}" target="dashboard-content">Batch Evaluation</a>
+      <a class="nav-link {% if active_page == 'records' %}active-tab{% endif %}" data-tab="records" href="{{ url_for('records', embed=1) }}" target="dashboard-content">Records Updation</a>
+      <a class="nav-link {% if active_page == 'graphs' %}active-tab{% endif %}" data-tab="graphs" href="{{ url_for('graphs', embed=1) }}" target="dashboard-content">Graphical Representation</a>
+      <a class="nav-link ghost" href="{{ url_for('logout') }}">Logout</a>
+    </aside>
+
+    <main class="dashboard-main">
+      <iframe class="dashboard-frame" name="dashboard-content" title="Dashboard Content" src="{% if active_page == 'batch' %}{{ url_for('batch_evaluation', embed=1) }}{% elif active_page == 'records' %}{{ url_for('records', embed=1) }}{% elif active_page == 'graphs' %}{{ url_for('graphs', embed=1) }}{% else %}{{ url_for('single_evaluation', embed=1) }}{% endif %}"></iframe>
+    </main>
+  </div>
+  <script>
+    const dashboardFrame = document.querySelector(".dashboard-frame");
+    const navLinks = document.querySelectorAll(".dashboard-nav .nav-link[data-tab]");
+    const setActiveTab = (currentTab) => {
+      navLinks.forEach((item) => {
+        item.classList.toggle("active-tab", item.dataset.tab === currentTab);
+      });
+    };
+
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        setActiveTab(link.dataset.tab);
+      });
+    });
+
+    dashboardFrame.addEventListener("load", () => {
+      let src = dashboardFrame.getAttribute("src") || "";
+      try {
+        src = dashboardFrame.contentWindow.location.href;
+      } catch (error) {
+        // Use the iframe src attribute as a fallback.
+      }
+      let currentTab = "single";
+      if (src.includes("/batch")) currentTab = "batch";
+      if (src.includes("/records")) currentTab = "records";
+      if (src.includes("/graphs")) currentTab = "graphs";
+      setActiveTab(currentTab);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graphical Representation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="app-page">
+  <div class="{% if embedded %}embed-shell{% else %}container{% endif %}">
+    <div class="app-shell graph-shell">
+      <div class="{% if embedded %}embed-header{% else %}topbar{% endif %}">
+        <div>
+          <h1>Graphical Representation</h1>
+          <p class="subtitle">Training dataset charts for layoff risk, department trends, gender mix, and salary vs risk.</p>
+        </div>
+        {% if not embedded %}
+        <div class="topbar-actions">
+          <a class="btn-link" href="{{ url_for('dashboard', tab='graphs') }}">Back to Dashboard</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <section class="stats-grid">
+        <article class="stat-card"><h3>Low Risk Count</h3><p>{{ charts.risk_counts[0] }}</p></article>
+        <article class="stat-card"><h3>High Risk Count</h3><p>{{ charts.risk_counts[1] }}</p></article>
+        <article class="stat-card"><h3>Departments</h3><p>{{ charts.department_labels|length }}</p></article>
+        <article class="stat-card"><h3>Salary Points</h3><p>{{ charts.salary_points|length }}</p></article>
+      </section>
+
+      <section class="graph-grid">
+        <article class="panel graph-card">
+          <h2>High Risk vs Low Risk</h2>
+          <canvas id="riskChart"></canvas>
+        </article>
+
+        <article class="panel graph-card">
+          <h2>Department-wise Layoff Risk</h2>
+          <canvas id="departmentChart"></canvas>
+        </article>
+
+        <article class="panel graph-card">
+          <h2>Gender-wise Distribution</h2>
+          <canvas id="genderChart"></canvas>
+        </article>
+
+        <article class="panel graph-card">
+          <h2>Salary vs Risk</h2>
+          <canvas id="salaryChart"></canvas>
+        </article>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const charts = {{ charts|tojson }};
+
+    new Chart(document.getElementById("riskChart"), {
+      type: "doughnut",
+      data: {
+        labels: charts.risk_labels,
+        datasets: [{
+          data: charts.risk_counts,
+          backgroundColor: ["#1d4ed8", "#ef4444"],
+          borderColor: "#ffffff",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
+    });
+
+    new Chart(document.getElementById("departmentChart"), {
+      type: "bar",
+      data: {
+        labels: charts.department_labels,
+        datasets: [{
+          label: "High-Risk Rate (%)",
+          data: charts.department_risk,
+          backgroundColor: "#0f766e",
+          borderRadius: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: "Risk %" }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    new Chart(document.getElementById("genderChart"), {
+      type: "pie",
+      data: {
+        labels: charts.gender_labels,
+        datasets: [{
+          data: charts.gender_counts,
+          backgroundColor: ["#2563eb", "#f59e0b", "#10b981", "#8b5cf6"],
+          borderColor: "#ffffff",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" }
+        }
+      }
+    });
+
+    new Chart(document.getElementById("salaryChart"), {
+      type: "scatter",
+      data: {
+        datasets: [{
+          label: "Salary vs Layoff Risk",
+          data: charts.salary_points,
+          backgroundColor: "rgba(37, 99, 235, 0.55)",
+          borderColor: "#1d4ed8",
+          pointRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: { display: true, text: "Monthly Income" }
+          },
+          y: {
+            min: 0,
+            max: 1,
+            ticks: {
+              stepSize: 1,
+              callback: (value) => value === 1 ? "High" : "Low"
+            },
+            title: { display: true, text: "Risk Label" }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
